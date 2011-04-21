@@ -1,0 +1,28 @@
+.item h1 {
+	font-size: 1.5em;
+}
+
+.item img {
+	border: 1px solid #000;
+	float: left;
+	margin-right: 10px;
+}
+
+.item hr {
+	border-bottom: 1px solid #000;
+}
+
+div.feed-box {
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid black;
+	width: 200px;
+	height: 120px;
+	text-align: center;
+}
+
+img.feed-thumbnail {
+	width: 100px;
+	height: 100px;
+}

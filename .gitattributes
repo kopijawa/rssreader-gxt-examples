@@ -1,0 +1,6 @@
+*.js -crlf
+*.css -crlf
+*.html -crlf
+*.java -crlf
+*.xml -crlf
+*.properties -crlf

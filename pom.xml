@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.danielvaughan.rssreader.client</groupId>
+  <artifactId>rssreader-gxt-example</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>RSSReader-gxt-example</name>
+  <url>http://maven.apache.org</url>
+
+  <modules>
+    <module>chapter1</module>
+    <module>chapter2</module>
+    <module>chapter3</module>
+    <module>chapter4</module>
+    <module>chapter5</module>
+    <module>chapter6</module>
+    <module>chapter7</module>
+    <module>chapter8</module>
+    <module>chapter9</module>
+    <module>chapter10</module>
+  </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Convenience property to set the GWT version -->
+      <gwtVersion>2.1.1</gwtVersion>
+      <gxtVersion>2.2.0</gxtVersion>
+    
+      <jdom.version>1.1</jdom.version> 
+      <jdo-api.version>3.0</jdo-api.version> 
+      <jdo.version>2.0-20050809.1515</jdo.version> 
+      <google-collections.version>1.0</google-collections.version> 
+    
+      <!-- GWT needs at least java 1.5 -->
+      <maven.compiler.source>1.5</maven.compiler.source>
+      <maven.compiler.target>1.5</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${gwtVersion}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${gwtVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <version>${gwtVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <version>${google-collections.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.extjs</groupId>
+    	<artifactId>gxt</artifactId>
+    	<version>${gxtVersion}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.jdom</groupId>
+    	<artifactId>jdom</artifactId>
+    	<version>${jdom.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>javax.jdo</groupId>
+    	<artifactId>jdo</artifactId>
+    	<version>${jdo.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>javax.jdo</groupId>
+    	<artifactId>jdo-api</artifactId>
+    	<version>${jdo-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.4</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Generate compiled stuff in the folder used for developing mode --> 
+    <outputDirectory>target/www/WEB-INF/classes</outputDirectory>
+    
+    <plugins>
+      
+      <!-- GWT Maven Plugin-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <!-- JS is only needed in the package phase, this speeds up testing --> 
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <!-- Plugin configuration. There are many available options, 
+             see gwt-maven-plugin documentation at codehaus.org --> 
+        <configuration>
+          <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
+          <runTarget>RSSReader.html</runTarget>
+          <!-- Location of the develop-mode web application structure (gwt:run). -->
+          <hostedWebapp>target/www</hostedWebapp>
+          <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
+          <soyc>true</soyc>
+        </configuration>
+      </plugin>
+
+      <!-- Add source folders to test classpath in order to run gwt-tests as normal junit-tests -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <additionalClasspathElements>
+            <additionalClasspathElement>${project.build.sourceDirectory}</additionalClasspathElement>
+            <additionalClasspathElement>${project.build.testSourceDirectory}</additionalClasspathElement>
+          </additionalClasspathElements>
+          <useManifestOnlyJar>false</useManifestOnlyJar>
+          <forkMode>always</forkMode>
+
+          <!-- Folder for generated testing stuff --> 
+          <systemProperties>
+            <property>
+              <name>gwt.args</name>
+              <value>-out target/www</value>
+            </property>
+          </systemProperties>
+        </configuration>
+      </plugin>
+      
+      <!-- Copy static web files before executing gwt:run -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/www</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/webapp</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Delete gwt generated stuff -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset><directory>src/main/webapp/rssreader</directory></fileset>
+            <fileset><directory>src/main/webapp/WEB-INF/classes</directory></fileset>
+            <fileset><directory>tomcat</directory></fileset>
+            <fileset><directory>www-test</directory></fileset>
+            <fileset><directory>.gwt-tmp</directory></fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+
+</project>
