@@ -6,6 +6,7 @@
     <artifactId>rssreader-gxt-example</artifactId>
     <groupId>com.danielvaughan.rssreader.client</groupId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../rssreader-gxt-example</relativePath>
   </parent>
   <groupId>com.danielvaughan.rssreader.client</groupId>
   <artifactId>chapter10</artifactId>
